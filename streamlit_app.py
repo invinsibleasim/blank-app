@@ -1,10 +1,5 @@
-# %load ctm (1).py
-#!pip install streamlit
-#!pip install reportlab
 import streamlit as st
 import pandas as pd
-import matplotlib
-matplotlib.use("Agg")  # Use a non-GUI backend suitable for servers
 import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
@@ -409,7 +404,7 @@ def create_pdf_report(total_cell_power, module_pmax, module_efficiency, df_losse
         ["Power Loss", f"{total_cell_power - module_pmax:.1f}", "Wp"],
         ["Module Efficiency", f"{module_efficiency:.2f}", "%"],
         ["CTM Ratio", f"{ctm_ratio*100:.2f}", "%"],
-        ["Total CTM Loss", f"{total_ctm_loss:.2f}", "%"],
+        ["Total CTM Loss", f"{total_ctm_loss:.2f}", "%"]
     ]
 
     results_table = Table(results_data, colWidths=[2.5*inch, 1.5*inch, 1.0*inch])
@@ -461,7 +456,7 @@ def create_pdf_report(total_cell_power, module_pmax, module_efficiency, df_losse
         ["Parameter", "Value", "Unit"],
         ["Annual Energy Output", f"{annual_energy_total:.0f}", "kWh/year"],
         ["Annual Energy Loss (CTM)", f"{annual_energy_loss:.0f}", "kWh/year"],
-        ["Loss Percentage", f"{total_ctm_loss:.2f}", "%"],
+        ["Loss Percentage", f"{total_ctm_loss:.2f}", "%"]
     ]
 
     energy_table = Table(energy_data, colWidths=[2.5*inch, 1.5*inch, 1.0*inch])
@@ -531,7 +526,7 @@ def create_pdf_report(total_cell_power, module_pmax, module_efficiency, df_losse
     story.append(Paragraph(signature_text, body_style))
 
     doc.build(story)
-    buffer.seek(0);
+    buffer.seek(0)
     return buffer
 
 st.markdown("---")
