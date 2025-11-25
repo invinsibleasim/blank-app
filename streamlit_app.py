@@ -1,80 +1,175 @@
-import streamlit as st
+import ipywidgets as widgets
+from IPython.display import display, HTML
 import pandas as pd
-import plotly.express as px
-import fitz  # PyMuPDF for PDF export
-from io import BytesIO
-st.title("Advanced CTM Loss Calculator")
+import plotly.graph_objects as go
+import io
 
-# Initialize session state for multiple modules
-if "modules" not in st.session_state:
-    st.session_state.modules = []
+# ======================================================================
+#                       CALCULATION FUNCTION
+# ======================================================================
 
-st.header("Add Module Parameters")
-
-# Input fields for one module
-cell_power = st.number_input("Cell Power (Wp)", min_value=0.0, value=5.0)
-cell_efficiency = st.number_input("Cell Efficiency (%)", min_value=0.0, value=18.0)
-num_cells = st.number_input("Number of Cells", min_value=1, value=60)
-module_area = st.number_input("Module Area (m²)", min_value=0.0, value=1.6)
-cell_length = st.number_input("Cell Length (mm)", min_value=0.0, value=156.0)
-cell_width = st.number_input("Cell Width (mm)", min_value=0.0, value=156.0)
-glass_transmission = st.number_input("Glass Transmission (%)", min_value=0.0, value=91.0)
-encapsulant_transmission = st.number_input("Encapsulant Transmission (%)", min_value=0.0, value=95.0)
-num_busbars = st.number_input("Number of Busbars", min_value=1, value=5)
-ribbon_width = st.number_input("Ribbon Width (mm)", min_value=0.0, value=1.5)
-ribbon_thickness = st.number_input("Ribbon Thickness (mm)", min_value=0.0, value=0.2)
-cell_binning_tolerance = st.number_input("Cell Binning Tolerance (±%)", min_value=0.0, value=2.0)
-junction_box_loss = st.number_input("Junction Box & Cable Loss (%)", min_value=0.0, value=0.5)
-
-if st.button("Add Module"):
+def calculate_ctm(cell_power, num_cells, ctm):
     total_cell_power = cell_power * num_cells
-    optical_loss = 100 - ((glass_transmission * encapsulant_transmission) / 100)
-    resistive_loss = 0.5  # Placeholder for advanced calculation
-    mismatch_loss = cell_binning_tolerance
-    additional_loss = junction_box_loss
-    final_module_power = total_cell_power * (1 - (optical_loss + resistive_loss + mismatch_loss + additional_loss)/100)
-    ctm_ratio = (final_module_power / total_cell_power) * 100
+    module_power = total_cell_power * ctm
+    loss_w = total_cell_power - module_power
+    loss_pct = (1 - ctm) * 100
+    return total_cell_power, module_power, loss_w, loss_pct
 
-    st.session_state.modules.append({
-        "Cell Power": cell_power,
-        "Num Cells": num_cells,
-        "Total Cell Power": total_cell_power,
-        "Final Module Power": final_module_power,
-        "CTM Ratio": ctm_ratio,
-        "Optical Loss": optical_loss,
-        "Resistive Loss": resistive_loss,
-        "Mismatch Loss": mismatch_loss,
-        "Additional Loss": additional_loss
-    })
 
-# Display all modules
-if st.session_state.modules:
-    st.subheader("Module Comparison")
-    df = pd.DataFrame(st.session_state.modules)
-    st.write(df)
+# ======================================================================
+#                       UI ELEMENTS (WIDGETS)
+# ======================================================================
 
-    # Chart for CTM Ratio comparison
-    fig_ctm = px.bar(df, x=df.index, y="CTM Ratio", title="CTM Ratio Comparison", labels={"x":"Module Index"})
-    st.plotly_chart(fig_ctm)
+style = {'description_width': '150px'}
+layout = widgets.Layout(width='400px')
 
-    # Optimization suggestions
-    st.subheader("Optimization Suggestions")
-    st.write("- Improve glass and encapsulant transmission to reduce optical losses.")
-    st.write("- Optimize busbar and ribbon design to minimize resistive losses.")
-    st.write("- Reduce cell binning tolerance for better mismatch performance.")
+cell_power_input = widgets.FloatText(
+    value=5.2, description="Cell Power (W):", style=style, layout=layout
+)
 
-    # PDF Export
-    if st.button("Export to PDF"):
-        pdf_buffer = BytesIO()
-        doc = fitz.open()
-        page = doc.new_page()
-        page.insert_text((50, 50), "CTM Loss Analysis Report", fontsize=18)
-        page.insert_text((50, 80), "Module Comparison Data:
-" + df.to_string(index=False), fontsize=12)
-        page.insert_text((50, 300), "Optimization Suggestions:
-- Improve optical transmission
-- Optimize busbar design
-- Reduce mismatch losses", fontsize=12)
-        doc.save(pdf_buffer)
-        doc.close()
-        st.download_button("Download PDF", data=pdf_buffer.getvalue(), file_name="CTM_Loss_Analysis_Report.pdf", mime="application/pdf")
+num_cells_input = widgets.IntText(
+    value=60, description="Num Cells:", style=style, layout=layout
+)
+
+ctm_input = widgets.FloatSlider(
+    value=0.97, min=0.90, max=1.00, step=0.001,
+    description="CTM Ratio:", style=style, layout=layout
+)
+
+calc_button = widgets.Button(
+    description="Calculate", button_style="success", layout=layout
+)
+
+download_button = widgets.Button(
+    description="Download CSV", button_style="info", layout=layout
+)
+download_button.disabled = True  # enabled after calculation
+
+output_box = widgets.Output()
+graph_box = widgets.Output()
+
+
+# ======================================================================
+#                       CSV BUFFER
+# ======================================================================
+
+csv_buffer = None
+
+
+# ======================================================================
+#                   CALCULATION BUTTON CALLBACK
+# ======================================================================
+
+def on_calculate_clicked(b):
+    global csv_buffer
+    with output_box:
+        output_box.clear_output()
+
+        cell_power = cell_power_input.value
+        num_c = num_cells_input.value
+        ctm = ctm_input.value
+
+        total_cell, mod_power, loss_w, loss_pct = calculate_ctm(cell_power, num_c, ctm)
+
+        # Prepare CSV
+        df = pd.DataFrame({
+            "Metric": ["Total Cell Power", "Module Power", "CTM Loss (W)", "CTM Loss (%)"],
+            "Value": [total_cell, mod_power, loss_w, loss_pct]
+        })
+
+        csv_buffer = io.StringIO()
+        df.to_csv(csv_buffer, index=False)
+
+        # Display results
+        display(HTML(f"""
+        <div style="
+            background:#f8faff;
+            padding:20px;
+            margin-top:10px;
+            border-radius:10px;
+            width:480px;
+            font-family:Arial; font-size:15px;">
+            <h3 style="color:#0A3D91;">CTM Calculation Results</h3>
+            <p><b>Total Cell Power:</b> {total_cell:.3f} W</p>
+            <p><b>Module Power:</b> {mod_power:.3f} W</p>
+            <p><b>CTM Loss:</b> {loss_w:.3f} W</p>
+            <p><b>CTM Loss (%):</b> {loss_pct:.2f} %</p>
+        </div>
+        """))
+
+        download_button.disabled = False
+
+    # Update graph
+    with graph_box:
+        graph_box.clear_output()
+
+        ctm_values = [x / 1000 for x in range(900, 1001)]
+        module_power_curve = [(cell_power * num_c) * c for c in ctm_values]
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=ctm_values,
+            y=module_power_curve,
+            mode='lines',
+            name="Module Power Curve",
+            line=dict(color="blue", width=3)
+        ))
+
+        fig.add_trace(go.Scatter(
+            x=[ctm], y=[mod_power],
+            mode='markers',
+            marker=dict(color="red", size=12),
+            name="Selected CTM"
+        ))
+
+        fig.update_layout(
+            title="Module Power vs CTM Ratio",
+            xaxis_title="CTM Ratio",
+            yaxis_title="Module Power (W)",
+            template="plotly_white",
+            width=700, height=450
+        )
+
+        fig.show()
+
+
+calc_button.on_click(on_calculate_clicked)
+
+
+# ======================================================================
+#                         CSV DOWNLOAD CALLBACK
+# ======================================================================
+
+def on_download_clicked(b):
+    with output_box:
+        data = csv_buffer.getvalue().encode()
+        b.data = data
+        b.filename = "ctm_results.csv"
+        b._repr_mimebundle_ = lambda *args: {}
+
+
+download_button.on_click(on_download_clicked)
+
+
+# ======================================================================
+#                       DISPLAY FINAL UI
+# ======================================================================
+
+display(HTML("""
+<h2 style="font-family:Arial; color:#0A3D91;">CTM Loss of PV Module Calculator</h2>
+<p style="font-family:Arial; font-size:15px; width:600px;">
+A complete interactive CTM (Cell-to-Module) loss calculator with Bootstrap-like UI, Plotly graph, and CSV export.
+</p>
+"""))
+
+ui = widgets.VBox([
+    cell_power_input,
+    num_cells_input,
+    ctm_input,
+    calc_button,
+    download_button,
+    output_box,
+    graph_box
+])
+
+display(ui)
