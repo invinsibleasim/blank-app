@@ -74,4 +74,3 @@ if st.session_state.modules:
         doc.save(pdf_buffer)
         doc.close()
         st.download_button("Download PDF", data=pdf_buffer.getvalue(), file_name="CTM_Loss_Analysis_Report.pdf", mime="application/pdf")
-
