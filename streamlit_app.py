@@ -49,7 +49,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("<h1 class='title-main'>CTM Loss Calculator</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: #555;'>Luminous Power Technologies</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: #555;'>PV module Power Technologies</h3>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center; color: #777;'>144 Half-Cut Cell TOPCon Modules</h4>", unsafe_allow_html=True)
 
 st.sidebar.header("Input Configuration")
@@ -382,7 +382,7 @@ def create_pdf_report(total_cell_power, module_pmax, module_efficiency, df_losse
     story.append(Paragraph("DEMO REPORT", heading_style))
     story.append(Spacer(1, 0.1*inch))
 
-    company_text = "Luminous Power Technologies<br/>144 Half-Cut Cell TOPCon Module"
+    company_text = "PV module Power Technologies<br/>144 Half-Cut Cell TOPCon Module"
     story.append(Paragraph(company_text, body_style))
 
     # CURRENT DATE AND TIME AT REPORT GENERATION (DOWNLOAD TIME)
@@ -522,7 +522,7 @@ def create_pdf_report(total_cell_power, module_pmax, module_efficiency, df_losse
     story.append(Paragraph("_" * 80, body_style))
     story.append(Spacer(1, 0.1*inch))
 
-    signature_text = "<b>CTM Loss Calculator</b> | Developed by <b>Gokul Raam G</b> Senior Engineer - R&DX<br/><b>Luminous Power Technologies</b>"
+    signature_text = "<b>CTM Loss Calculator</b> | Developed by <b>Gokul Raam G</b> Senior Engineer - R&DX<br/><b>PV module Power Technologies</b>"
     story.append(Paragraph(signature_text, body_style))
 
     doc.build(story)
