@@ -3,6 +3,8 @@
 #!pip install reportlab
 import streamlit as st
 import pandas as pd
+import matplotlib
+matplotlib.use("Agg")  # Use a non-GUI backend suitable for servers
 import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
