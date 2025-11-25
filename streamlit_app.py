@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-#import fitz  # PyMuPDF for PDF export
+import fitz  # PyMuPDF for PDF export
 from io import BytesIO
 st.title("Advanced CTM Loss Calculator")
 
