@@ -12,7 +12,7 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, 
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
 
 st.set_page_config(
-    page_title="CTM Loss Calculator - 144 Half-Cut Cell Modules",
+    page_title="CTM Loss Calculator - Half-Cut Cell Modules",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -50,7 +50,7 @@ st.markdown("""
 
 st.markdown("<h1 class='title-main'>CTM Loss Calculator</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: #555;'>PV module Power Technologies</h3>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center; color: #777;'>144 Half-Cut Cell TOPCon Modules</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center; color: #777;'>Half-Cut Cell TOPCon Modules</h4>", unsafe_allow_html=True)
 
 st.sidebar.header("Input Configuration")
 
@@ -59,12 +59,12 @@ if st.sidebar.button("Reset to Default Values", use_container_width=True):
 
 st.sidebar.subheader("1. Solar Cell Parameters")
 cell_power = st.sidebar.number_input("Cell Power (Wp)", min_value=2.0, max_value=10.0, value=4.15, step=0.05, help="Half-cut TOPCon cell")
-cell_efficiency = st.sidebar.number_input("Cell Efficiency (%)", min_value=20.0, max_value=26.0, value=24.7, step=0.1, help="TOPCon: 24.7%")
+cell_efficiency = st.sidebar.number_input("Cell Efficiency (%)", min_value=20.0, max_value=27.0, value=24.7, step=0.1, help="TOPCon: 24.7%")
 num_cells = st.sidebar.number_input("Number of Cells", min_value=100, max_value=144, value=144, step=2, help="144 half-cut cells")
 
 st.sidebar.subheader("2. Module Specifications")
-module_area = st.sidebar.number_input("Module Area (m²)", min_value=2.0, max_value=3.0, value=2.586, step=0.01, help="2278mm x 1134mm x 33mm")
-cell_length = st.sidebar.number_input("Cell Length (mm)", min_value=180.0, max_value=185.0, value=182.2, step=0.1, help="Half-cut: 182.2mm")
+module_area = st.sidebar.number_input("Module Area (m²)", min_value=2.0, max_value=3.5, value=2.586, step=0.01, help="2278mm x 1134mm x 33mm")
+cell_length = st.sidebar.number_input("Cell Length (mm)", min_value=180.0, max_value=210.0, value=182.2, step=0.1, help="Half-cut: 182.2mm")
 cell_width = st.sidebar.number_input("Cell Width (mm)", min_value=85.0, max_value=95.0, value=91.1, step=0.1, help="Half-cut: 91.1mm")
 
 st.sidebar.subheader("3. Optical Loss Parameters")
@@ -72,7 +72,7 @@ glass_transmission = st.sidebar.slider("Glass Transmission (%)", 88.0, 96.0, 94.
 encapsulant_transmission = st.sidebar.slider("Encapsulant Transmission (%)", 94.0, 98.0, 94.0, 0.5, help="Encapsulant: 94%")
 
 st.sidebar.subheader("4. Resistive Loss Parameters")
-num_busbars = st.sidebar.selectbox("Number of Busbars", [3, 5, 9, 12, 16], index=3, help="MBB: 12 busbars")
+num_busbars = st.sidebar.selectbox("Number of Busbars", [3, 5, 9, 12, 16, 18, 20], index=3, help="MBB: 12 busbars")
 ribbon_width = st.sidebar.number_input("Ribbon Width (mm)", min_value=0.8, max_value=2.5, value=1.5, step=0.1)
 ribbon_thickness = st.sidebar.number_input("Ribbon Thickness (mm)", min_value=0.15, max_value=0.35, value=0.25, step=0.05)
 
