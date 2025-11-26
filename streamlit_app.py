@@ -522,7 +522,7 @@ def create_pdf_report(total_cell_power, module_pmax, module_efficiency, df_losse
     story.append(Paragraph("_" * 80, body_style))
     story.append(Spacer(1, 0.1*inch))
 
-    signature_text = "<b>CTM Loss Calculator</b> | Developed by <b>Gokul Raam G</b> Senior Engineer - R&DX<br/><b>PV module Power Technologies</b>"
+    signature_text = "<b>CTM Loss Calculator</b> | Reference: Special thanks to <b>Gokul Raam G</b>"
     story.append(Paragraph(signature_text, body_style))
 
     doc.build(story)
