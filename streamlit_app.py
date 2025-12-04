@@ -72,7 +72,7 @@ glass_transmission = st.sidebar.slider("Glass Transmission (%)", 88.0, 96.0, 94.
 encapsulant_transmission = st.sidebar.slider("Encapsulant Transmission (%)", 94.0, 98.0, 94.0, 0.5, help="Encapsulant: 94%")
 
 st.sidebar.subheader("4. Resistive Loss Parameters")
-num_busbars = st.sidebar.selectbox("Number of Busbars", [3, 5, 9, 10, 12, 16, 18, 20], index=3, help="MBB: 12 busbars")
+num_busbars = st.sidebar.selectbox("Number of Busbars", [3, 5, 9, 12, 16, 18, 20], index=3, help="MBB: 12 busbars")
 ribbon_width = st.sidebar.number_input("Ribbon Width (mm)", min_value=0.8, max_value=4, value=1.5, step=0.1)
 ribbon_thickness = st.sidebar.number_input("Ribbon Thickness (mm)", min_value=0.15, max_value=0.35, value=0.25, step=0.05)
 
