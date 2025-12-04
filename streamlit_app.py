@@ -141,7 +141,7 @@ loss_factor = 1 - (total_ctm_loss / 100)  # Same as CTM ratio
 # Base reference ratios (at optimal conditions)
 voc_pmax_ratio = 0.0879  # 51.86 / 590
 isc_pmax_ratio = 0.0245  # 14.49 / 590
-vmpp_voc_ratio = 0.826   # 42.88 / 51.86
+vmpp_voc_ratio = 0.856   # 42.88 / 51.86
 impp_isc_ratio = 0.950   # 13.76 / 14.49
 
 # Optical loss impact on voltage (higher transmission loss reduces Voc)
