@@ -77,7 +77,7 @@ ribbon_width = st.sidebar.number_input("Ribbon Width (mm)", min_value=0.8, max_v
 ribbon_thickness = st.sidebar.number_input("Ribbon Thickness (mm)", min_value=0.15, max_value=5.5, value=0.25, step=0.05)
 
 st.sidebar.subheader("5. Mismatch Parameters")
-cell_binning_tolerance = st.sidebar.slider("Cell Binning Tolerance (±%)", 0.0, 0.1, 5.0, 1.5, 0.5, help="Tight sorting")
+cell_binning_tolerance = st.sidebar.slider("Cell Binning Tolerance (±%)", 0.0, 5.0, 1.5, 0.5, help="Tight sorting")
 
 st.sidebar.subheader("6. Additional Parameters")
 junction_box_loss = st.sidebar.slider("Junction Box & Cable Loss (%)", 0.1, 2.0, 0.35, 0.1)
