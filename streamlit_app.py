@@ -146,7 +146,7 @@ impp_isc_ratio = 0.950   # 13.76 / 14.49
 
 # Optical loss impact on voltage (higher transmission loss reduces Voc)
 optical_loss_factor = (glass_transmission * encapsulant_transmission) / (94.0 * 94.0)
-voc_adjustment = optical_loss_factor * 0.01  # Voc reduced by optical losses
+voc_adjustment = optical_loss_factor * 0.98  # Voc reduced by optical losses
 
 # Resistive loss impact on current (higher resistance reduces Isc)
 resistive_loss_factor = 1 - (total_resistive_loss / 100)
