@@ -60,7 +60,7 @@ if st.sidebar.button("Reset to Default Values", use_container_width=True):
 st.sidebar.subheader("1. Solar Cell Parameters")
 cell_power = st.sidebar.number_input("Cell Power (Wp)", min_value=2.0, max_value=10.0, value=4.15, step=0.05, help="Half-cut TOPCon cell")
 cell_efficiency = st.sidebar.number_input("Cell Efficiency (%)", min_value=20.0, max_value=27.0, value=24.7, step=0.1, help="TOPCon: 24.7%")
-num_cells = st.sidebar.number_input("Number of Cells", min_value=100, max_value=160, value=144, step=2, help="144 half-cut cells")
+num_cells = st.sidebar.number_input("Number of Cells", min_value=100, max_value=144, value=144, step=2, help="144 half-cut cells")
 
 st.sidebar.subheader("2. Module Specifications")
 module_area = st.sidebar.number_input("Module Area (m²)", min_value=2.0, max_value=3.5, value=2.586, step=0.01, help="2278mm x 1134mm x 33mm")
@@ -74,7 +74,7 @@ encapsulant_transmission = st.sidebar.slider("Encapsulant Transmission (%)", 94.
 st.sidebar.subheader("4. Resistive Loss Parameters")
 num_busbars = st.sidebar.selectbox("Number of Busbars", [3, 5, 9, 12, 16, 18, 20], index=3, help="MBB: 12 busbars")
 ribbon_width = st.sidebar.number_input("Ribbon Width (mm)", min_value=0.8, max_value=4, value=1.5, step=0.1)
-ribbon_thickness = st.sidebar.number_input("Ribbon Thickness (mm)", min_value=0.15, max_value=0.35, value=0.25, step=0.05)
+ribbon_thickness = st.sidebar.number_input("Ribbon Thickness (mm)", min_value=0.15, max_value=0.25, value=0.25, step=0.05)
 
 st.sidebar.subheader("5. Mismatch Parameters")
 cell_binning_tolerance = st.sidebar.slider("Cell Binning Tolerance (±%)", 0.0, 5.0, 1.5, 0.5, help="Tight sorting")
