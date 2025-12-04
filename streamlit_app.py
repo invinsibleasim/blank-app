@@ -69,7 +69,7 @@ cell_width = st.sidebar.number_input("Cell Width (mm)", min_value=85.0, max_valu
 
 st.sidebar.subheader("3. Optical Loss Parameters")
 glass_transmission = st.sidebar.slider("Glass Transmission (%)", 88.0, 96.0, 94.0, 0.5, help="AR-coated: 94%")
-encapsulant_transmission = st.sidebar.slider("Encapsulant Transmission (%)", 92.0, 94.0, 98.0, 94.0, 0.5, help="Encapsulant: 92%")
+encapsulant_transmission = st.sidebar.slider("Encapsulant Transmission (%)", 94.0, 98.0, 94.0, 0.5, help="Encapsulant: 94%")
 
 st.sidebar.subheader("4. Resistive Loss Parameters")
 num_busbars = st.sidebar.selectbox("Number of Busbars", [3, 5, 9, 10, 12, 16, 18, 20], index=3, help="MBB: 12 busbars")
